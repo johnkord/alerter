@@ -133,8 +133,6 @@ pub mod alerter_tokens {
         type Error = AlerterTokenError;
     
         fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
-            Outcome::Success(AlerterToken("foo".to_string()))
-            /*
             let keys: Vec<String> = request.headers()
                 .get("Authorization")
                 .filter_map(|x| { 
@@ -151,7 +149,6 @@ pub mod alerter_tokens {
                 1 => Outcome::Failure((Status::BadRequest, AlerterTokenError::Invalid)),
                 _ => Outcome::Failure((Status::BadRequest, AlerterTokenError::BadCount)),
             }
-            */
         }
     }
 }

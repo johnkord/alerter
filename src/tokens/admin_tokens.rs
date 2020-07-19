@@ -9,9 +9,9 @@ pub mod admin_tokens {
     use rocket::Outcome;
     use rocket::http::Status;
     use rocket::request::{self, Request, FromRequest};
-        
 
-        
+
+
     fn find_admin_token_dao(token: String) -> bool {
         let mut conn = Connection::open("my.sqlite").unwrap();
         let mut stmt = match conn.prepare("SELECT token FROM admin_tokens WHERE token = :token") {
@@ -58,7 +58,6 @@ pub mod admin_tokens {
         
         ret
     }
-
 
     fn write_admin_token_dao(token: String) -> Result<bool, AdminTokenError> {
         let conn = Connection::open("my.sqlite").unwrap();
@@ -126,13 +125,25 @@ pub mod admin_tokens {
         Invalid,
     }
         
-        
+    use std::env;
+
+    fn equals_super_admin_token(token: String) -> bool {
+        let super_admin_token: Option<String> = match env::var("SUPER_ADMIN_TOKEN") {
+            Ok(val) => Some(val),
+            Err(e) => None,
+        };
+
+        match super_admin_token {
+            Some(x) => token.to_string() == x,
+            None => false
+        }
+    }
+
     impl<'a, 'r> FromRequest<'a, 'r> for AdminToken {
         type Error = AdminTokenError;
 
         fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
-            Outcome::Success(AdminToken("foo".to_string()))
-            /*
+            //Outcome::Success(AdminToken("foo".to_string()))
             let keys: Vec<String> = request.headers()
                 .get("Authorization")
                 .filter_map(|x| { 
@@ -145,11 +156,11 @@ pub mod admin_tokens {
                 .collect();
             match keys.len() {
                 0 => Outcome::Failure((Status::BadRequest, AdminTokenError::Missing)),
+                1 if equals_super_admin_token(keys[0].to_string()) => Outcome::Success(AdminToken(keys[0].to_string())),
                 1 if find_admin_token_dao(keys[0].to_string()) => Outcome::Success(AdminToken(keys[0].to_string())),
                 1 => Outcome::Failure((Status::BadRequest, AdminTokenError::Invalid)),
                 _ => Outcome::Failure((Status::BadRequest, AdminTokenError::BadCount)),
             }
-            */
         }
     }
 
