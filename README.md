@@ -1,5 +1,5 @@
 # Simple Alerts
-The purpose of this application is to have a server listening for alert events to occur, and then to display those alert events on a page, showing the timestamps of when those alert events occurred.
+The purpose of this application is to have a server listening for alert events to occur, give a very simple HTTP API for triggering those alerts, and then to give administrators a web page that displays those alert events.
 
 Written in Rust and React.
 
