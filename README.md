@@ -10,8 +10,8 @@ This is still a work in progress, but it works for now. To log in, from the admi
 ### CSRF Protection
 There's no need to worry about CSRF attacks because all backend endpoints expect the `Authorization` header, and the javascript presented by the server to the client will read the cookie set above and will set make sure all javascript initiated URL requests to have an `Authorization` header with the value `Bearer COOKIE_SET_ABOVE`. Another site could not forward a user to one of these backend endpoints with a correct `Authorization` header because other sites cannot read the server site's cookie.
 
-## Alert Producer (write)
-An alert can be produced by making a `GET` web request to `https://ALERT_SERVER_FQDN:PORT/alerts/v1/write` using an Alerter token in the Authorization header as a Bearer token. Here's an example with curl's CLI:
+## Producing Alerts
+An alert can be produced by making a `GET` web request to `https://ALERT_SERVER_FQDN:PORT/alerts/v1/write/ALERT_ID_HERE` using an Alerter token in the Authorization header as a Bearer token. Here's an example with curl's CLI:
 
 ```bash
 curl https://ALERT_SERVER_FQDN:PORT/alerts/v1/write/MY_ALERT_ID_HERE  -H "Authorization: Bearer MY_ALERTER_TOKEN_here"
@@ -35,6 +35,8 @@ https://ALERT_SERVER_FQDN:PORT/admin/v1/list_alerter_token
 https://ALERT_SERVER_FQDN:PORT/admin/v1/write_alerter_token
 https://ALERT_SERVER_FQDN:PORT/admin/v1/delete_alerter_token
 ```
+
+These tokens are used to authorize the alert producing endpoint: `https://ALERT_SERVER_FQDN:PORT/alerts/v1/write/ALERT_ID_HERE`
 
 ## Docker image
 The image can be found here: https://hub.docker.com/repository/docker/johnkordich/alerter/general
