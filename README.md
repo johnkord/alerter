@@ -5,7 +5,10 @@ Written in Rust and React.
 
 ## Admin Page
 ### Logging in
-This is still a work in progress, but it works for now. To log in, from the admin page served at the base index of the application, open up your browser's developer console by hitting F12. Then, click the console tab, and enter: `document.cookie = 'ADMIN_TOKEN_HERE'`
+This is still a work in progress, but it works for now. To log in, from the admin page served at the base index of the application, open up your browser's developer console by hitting F12. Then, click the console tab, and enter: `document.cookie = 'ADMIN_TOKEN_HERE'`.
+
+### CSRF Protection
+There's no need to worry about CSRF attacks because all backend endpoints expect the `Authorization` header, and the javascript presented by the server to the client will read the cookie set above and will set make sure all javascript initiated URL requests to have an `Authorization` header with the value `Bearer COOKIE_SET_ABOVE`. Another site could not forward a user to one of these backend endpoints with a correct `Authorization` header because other sites cannot read the server site's cookie.
 
 ## Alert Producer (write)
 An alert can be produced by making a `GET` web request to `https://ALERT_SERVER_FQDN:PORT/alerts/v1/write` using an Alerter token in the Authorization header as a Bearer token. Here's an example with curl's CLI:
@@ -46,7 +49,7 @@ docker run  \
   johnkordich/alerter:latest
 ```
 
-Note:
+Notes about running the Docker container above:
 - ROCKET_TLS contains paths to a cert chain and a private key, for running this server with TLS. If you don't want TLS, just remove that line. If you want to learn more about TLS and to this yourself, file an issue in this repository asking for help and I would be glad to explain how to set this up!
 - The volume map (-v) option is for the certificate and private key. This should correlate to the ROCKET_TLS env var above it.
 - The `SUPER_ADMIN_TOKEN` acts as an Admin Token, as explained above, but it cannot be removed by the `delete_admin_token` endpoint. You will need it to first log in.
