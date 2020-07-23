@@ -3,6 +3,9 @@ The purpose of this application is to have a server listening for alert events t
 
 Written in Rust and React.
 
+## Screenshot
+![Example Screenshot 1](/images/simple_alerts_screenshot_1.png)
+
 ## Admin Page
 ### Logging in
 This is still a work in progress, but it works for now. To log in, from the admin page served at the base index of the application, open up your browser's developer console by hitting F12. Then, click the console tab, and enter: `document.cookie = 'ADMIN_TOKEN_HERE'`.
